@@ -3,16 +3,35 @@ import { Cat } from "lucide-react";
 import { useState } from "react";
 import { LoginForm } from "./components/LoginForm";
 import { toast } from "sonner";
+import { userService } from "@/services/userService";
 
 export default function LoginPage() {
   const [userChoice, setUserChoice] = useState<"login" | "register">("login");
   const [userName, setUserName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const handleLoginOrRegister = () => {
+  const handleLoginOrRegister = async () => {
     try {
-      console.log({ userName, password });
-      throw new Error("Simulação de erro");
+      const response = await userService.login({
+        username: userName,
+        password: password,
+      });
+      if (!response.success) {
+        throw new Error(
+          (response as { message?: string }).message || "Erro ao fazer login"
+        );
+      }
+      toast("Login realizado com sucesso!", {
+        description: "Você será redirecionado em breve.",
+        icon: "✅",
+        duration: 4000,
+        position: "top-right",
+        style: {
+          backgroundColor: "#28a745",
+          color: "#ffffff",
+          fontSize: "0.85rem",
+        },
+      });
     } catch {
       return toast("Erro ao tentar fazer login ou registrar", {
         description: "Verifique suas credenciais e tente novamente.",
