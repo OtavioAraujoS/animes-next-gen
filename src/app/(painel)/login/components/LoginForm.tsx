@@ -60,6 +60,7 @@ export function LoginForm({
         </div>
         <Button
           className="w-full"
+          disabled={!userName || !password}
           onClick={(e) => {
             e.preventDefault();
             loginOrRegister();
