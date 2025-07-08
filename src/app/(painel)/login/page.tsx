@@ -5,6 +5,16 @@ import { LoginForm } from "./components/LoginForm";
 
 export default function LoginPage() {
   const [userChoice, setUserChoice] = useState<"login" | "register">("login");
+  const [userName, setUserName] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const handleLoginOrRegister = () => {
+    try {
+      console.log({ userName, password });
+    } catch (error) {
+      console.error("Error during login or registration:", error);
+    }
+  };
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">
@@ -21,6 +31,11 @@ export default function LoginPage() {
             <LoginForm
               updateUserChoice={setUserChoice}
               userChoice={userChoice}
+              loginOrRegister={handleLoginOrRegister}
+              userName={userName}
+              setUserName={setUserName}
+              password={password}
+              setPassword={setPassword}
             />
           </div>
         </div>
