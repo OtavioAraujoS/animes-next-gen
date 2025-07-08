@@ -6,12 +6,22 @@ import { cn } from "@/lib/utils";
 export interface LoginFormProps {
   userChoice?: "login" | "register";
   updateUserChoice: (choice: "login" | "register") => void;
+  loginOrRegister: () => void;
+  userName?: string;
+  password?: string;
+  setUserName?: (name: string) => void;
+  setPassword?: (password: string) => void;
 }
 
 export function LoginForm({
   className,
   userChoice,
   updateUserChoice,
+  loginOrRegister,
+  userName,
+  setUserName,
+  password,
+  setPassword,
   ...props
 }: React.ComponentProps<"form"> & LoginFormProps) {
   const isLogin = userChoice === "login";
@@ -29,16 +39,32 @@ export function LoginForm({
       </div>
       <div className="grid gap-6">
         <div className="grid gap-3">
-          <Label>Nome de usuário</Label>
-          <Input placeholder="Insira seu nome de usuário" required />
+          <Label htmlFor="username">Nome de usuário</Label>
+          <Input
+            placeholder="Insira seu nome de usuário"
+            required
+            value={userName}
+            onChange={(e) => setUserName?.(e.target.value)}
+          />
         </div>
         <div className="grid gap-3">
           <div className="flex items-center">
             <Label htmlFor="password">Senha</Label>
           </div>
-          <Input type="password" required />
+          <Input
+            type="password"
+            required
+            value={password}
+            onChange={(e) => setPassword?.(e.target.value)}
+          />
         </div>
-        <Button type="submit" className="w-full">
+        <Button
+          className="w-full"
+          onClick={(e) => {
+            e.preventDefault();
+            loginOrRegister();
+          }}
+        >
           {isLogin ? "Entrar" : "Criar conta"}
         </Button>
       </div>
