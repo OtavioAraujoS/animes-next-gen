@@ -44,6 +44,7 @@ export function LoginForm({
             placeholder="Insira seu nome de usuário"
             required
             value={userName}
+            autoComplete="username"
             onChange={(e) => setUserName?.(e.target.value)}
           />
         </div>
@@ -53,6 +54,7 @@ export function LoginForm({
           </div>
           <Input
             type="password"
+            autoComplete="current-password"
             required
             value={password}
             onChange={(e) => setPassword?.(e.target.value)}
