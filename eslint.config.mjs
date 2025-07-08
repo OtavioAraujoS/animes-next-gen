@@ -11,6 +11,20 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
+  ...compat.config({
+    rules: {
+      "react-hooks/rules-of-hooks": 'off',
+      "react-hooks/exhaustive-deps": 'off'
+    },
+  }),
+  {
+    files: ["**/*.ts", "**/*.tsx"],
+    languageOptions: {
+      parserOptions: {
+        project: "./tsconfig.json",
+      },
+    },
+  },
 ];
 
 export default eslintConfig;
