@@ -2,6 +2,7 @@
 import { Cat } from "lucide-react";
 import { useState } from "react";
 import { LoginForm } from "./components/LoginForm";
+import { toast } from "sonner";
 
 export default function LoginPage() {
   const [userChoice, setUserChoice] = useState<"login" | "register">("login");
@@ -11,8 +12,19 @@ export default function LoginPage() {
   const handleLoginOrRegister = () => {
     try {
       console.log({ userName, password });
-    } catch (error) {
-      console.error("Error during login or registration:", error);
+      throw new Error("Simulação de erro");
+    } catch {
+      return toast("Erro ao tentar fazer login ou registrar", {
+        description: "Verifique suas credenciais e tente novamente.",
+        icon: "⚠️",
+        duration: 5000,
+        position: "top-right",
+        style: {
+          backgroundColor: "#c1121f",
+          color: "#ffffff",
+          fontSize: "0.9rem",
+        },
+      });
     }
   };
   return (
