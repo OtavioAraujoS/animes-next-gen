@@ -17,12 +17,12 @@ export default function LoginPage() {
       return toast("Erro ao tentar fazer login ou registrar", {
         description: "Verifique suas credenciais e tente novamente.",
         icon: "⚠️",
-        duration: 5000,
+        duration: 4000,
         position: "top-right",
         style: {
           backgroundColor: "#c1121f",
           color: "#ffffff",
-          fontSize: "0.9rem",
+          fontSize: "0.85rem",
         },
       });
     }
