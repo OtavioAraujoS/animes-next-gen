@@ -1,7 +1,37 @@
-export default function LoginPage() { 
-    return (
-        <div>
-            <h1>Login Page</h1>
+"use client";
+import { Cat } from "lucide-react";
+import { useState } from "react";
+import { LoginForm } from "./components/LoginForm";
+
+export default function LoginPage() {
+  const [userChoice, setUserChoice] = useState<"login" | "register">("login");
+  return (
+    <div className="grid min-h-svh lg:grid-cols-2">
+      <div className="flex flex-col gap-4 p-6 md:p-10">
+        <div className="flex justify-center gap-2 md:justify-start">
+          <a href="#" className="flex items-center gap-2 font-medium">
+            <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
+              <Cat className="size-4" />
+            </div>
+            Animes Next Gen
+          </a>
         </div>
-    )
+        <div className="flex flex-1 items-center justify-center">
+          <div className="w-full max-w-xs">
+            <LoginForm
+              updateUserChoice={setUserChoice}
+              userChoice={userChoice}
+            />
+          </div>
+        </div>
+      </div>
+      <div className="bg-muted relative hidden lg:block">
+        <img
+          src="/loginPage.webp"
+          alt="Image"
+          className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+        />
+      </div>
+    </div>
+  );
 }
