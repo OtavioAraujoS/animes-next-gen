@@ -4,14 +4,47 @@ import { useState } from "react";
 import { LoginForm } from "./components/LoginForm";
 import { toast } from "sonner";
 import { userService } from "@/services/userService";
+import { User } from "@/interfaces/User";
+import { ApiSuccessResponse } from "@/interfaces/ApiResponse";
 
 export default function LoginPage() {
   const [userChoice, setUserChoice] = useState<"login" | "register">("login");
   const [userName, setUserName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
+  const handleGetUsers = async () => { 
+    try {
+      const response = await userService.getUsers();
+      if (!response.success || !Array.isArray((response as ApiSuccessResponse<User[]>).data)) {
+        throw new Error("Erro ao buscar usuários.");
+      }
+      return (response as ApiSuccessResponse<User[]>).data;
+    } catch (error) {
+      toast("Erro ao obter usuários", {
+        description: String(error),
+        icon: "⚠️",
+        duration: 4000,
+        position: "top-right",
+        style: {
+          backgroundColor: "#c1121f",
+          color: "#ffffff",
+          fontSize: "0.85rem",
+        },
+      });
+    }
+    return [];
+  }
+
   const handleLoginOrRegister = async () => {
     try {
+      const users = await handleGetUsers();
+
+      console.log("users", users)
+
+      if (users.some(user => user.username === userName)) {
+        throw new Error("Usuário já existe. Por favor, escolha outro nome de usuário.");
+      }
+
       const response = await userService.login({
         username: userName,
         password: password,
@@ -32,9 +65,9 @@ export default function LoginPage() {
           fontSize: "0.85rem",
         },
       });
-    } catch {
+    } catch (error) {
       return toast("Erro ao tentar fazer login ou registrar", {
-        description: "Verifique suas credenciais e tente novamente.",
+        description: String(error) || "Verifique suas credenciais e tente novamente.",
         icon: "⚠️",
         duration: 4000,
         position: "top-right",
