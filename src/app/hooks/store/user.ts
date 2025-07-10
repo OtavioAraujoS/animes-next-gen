@@ -4,9 +4,10 @@ import { persist, createJSONStorage } from "zustand/middleware";
 interface UserState {
   user: {
     id: string;
+    avatar: string;
     name: string;
   } | null;
-  setUser: (user: { id: string; name: string } | null) => void;
+  setUser: (user: { id: string; avatar: string; name: string } | null) => void;
 }
 
 export const useUserStore = create<UserState>()(
