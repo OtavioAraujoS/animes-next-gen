@@ -1,4 +1,11 @@
 {
-  "users": [],
+  "users": [
+    {
+      "id": "8bd6",
+      "username": "otavio",
+      "password": "1",
+      "avatar": "https://example.com/avatar.jpg"
+    }
+  ],
   "animes": []
 }
