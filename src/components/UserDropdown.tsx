@@ -11,14 +11,13 @@ import {
 import {
   IconDotsVertical,
   IconLogout,
-  IconNotification,
   IconUserCircle,
 } from "@tabler/icons-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useUserStore } from "@/app/hooks/store/user";
 
 export function UserDropdown() {
-  const { user } = useUserStore();
+  const { user, setUser } = useUserStore();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="w-full flex items-center gap-2 rounded-lg text-white bg-transparent px-3 py-2 text-sm font-medium shadow-sm transition-colors">
@@ -27,7 +26,7 @@ export function UserDropdown() {
           <AvatarFallback className="rounded-lg">CN</AvatarFallback>
         </Avatar>
         <div className="grid flex-1 text-left text-sm leading-tight">
-          <span className="truncate font-medium">{user?.name}</span>
+          <span className="truncate font-medium text-base">{user?.name}</span>
         </div>
         <IconDotsVertical className="ml-auto size-4" />
       </DropdownMenuTrigger>
@@ -54,13 +53,15 @@ export function UserDropdown() {
             <IconUserCircle />
             Account
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <IconNotification />
-            Notifications
-          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => {
+            setUser(null);
+            localStorage.removeItem("user");
+            window.location.href = "/login";
+          }}
+        >
           <IconLogout />
           Log out
         </DropdownMenuItem>
