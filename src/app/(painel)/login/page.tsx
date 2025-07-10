@@ -6,16 +6,23 @@ import { toast } from "sonner";
 import { userService } from "@/services/userService";
 import { User } from "@/interfaces/User";
 import { ApiSuccessResponse } from "@/interfaces/ApiResponse";
+import { useRouter } from "next/navigation";
+import { useUserStore } from "@/app/hooks/store/user";
 
 export default function LoginPage() {
   const [userChoice, setUserChoice] = useState<"login" | "register">("login");
   const [userName, setUserName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const { setUser } = useUserStore();
+  const router = useRouter();
 
-  const handleGetUsers = async () => { 
+  const handleGetUsers = async () => {
     try {
       const response = await userService.getUsers();
-      if (!response.success || !Array.isArray((response as ApiSuccessResponse<User[]>).data)) {
+      if (
+        !response.success ||
+        !Array.isArray((response as ApiSuccessResponse<User[]>).data)
+      ) {
         throw new Error("Erro ao buscar usuários.");
       }
       return (response as ApiSuccessResponse<User[]>).data;
@@ -33,16 +40,28 @@ export default function LoginPage() {
       });
     }
     return [];
-  }
+  };
 
   const handleLoginOrRegister = async () => {
     try {
       const users = await handleGetUsers();
+      const userNameAndPasswordEqual = users.some((user) => {
+        return user.username === userName && user.password === password;
+      });
+      if (userChoice === "login") {
+        if (!userNameAndPasswordEqual) {
+          throw new Error("Usuário ou senha incorretos.");
+        }
 
-      console.log("users", users)
+        setUser({
+          id: users.find((user) => user.username === userName)?.id || "",
+          name: userName,
+        });
+        return router.push("/");
+      }
 
-      if (users.some(user => user.username === userName)) {
-        throw new Error("Usuário já existe. Por favor, escolha outro nome de usuário.");
+      if (userNameAndPasswordEqual) {
+        throw new Error("Usuário já existe. Tente outro nome de usuário.");
       }
 
       const response = await userService.login({
@@ -54,6 +73,11 @@ export default function LoginPage() {
           (response as { message?: string }).message || "Erro ao fazer login"
         );
       }
+      const userData = (response as ApiSuccessResponse<User>).data;
+      setUser({
+        id: userData.id,
+        name: userData.username,
+      });
       toast("Login realizado com sucesso!", {
         description: "Você será redirecionado em breve.",
         icon: "✅",
@@ -65,9 +89,11 @@ export default function LoginPage() {
           fontSize: "0.85rem",
         },
       });
+      router.push("/");
     } catch (error) {
       return toast("Erro ao tentar fazer login ou registrar", {
-        description: String(error) || "Verifique suas credenciais e tente novamente.",
+        description:
+          String(error) || "Verifique suas credenciais e tente novamente.",
         icon: "⚠️",
         duration: 4000,
         position: "top-right",
