@@ -56,6 +56,8 @@ export default function LoginPage() {
         setUser({
           id: users.find((user) => user.username === userName)?.id || "",
           name: userName,
+          avatar:
+            users.find((user) => user.username === userName)?.avatar || "",
         });
         return router.push("/");
       }
@@ -77,6 +79,7 @@ export default function LoginPage() {
       setUser({
         id: userData.id,
         name: userData.username,
+        avatar: userData.avatar,
       });
       toast("Login realizado com sucesso!", {
         description: "Você será redirecionado em breve.",
